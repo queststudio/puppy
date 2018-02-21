@@ -1,5 +1,5 @@
 print("Starting puppy...")
-print("Version 1.0.0")
+print("Version 1.0.1")
 wifi.setmode(wifi.STATION)
 wifi.sta.config {ssid="Gorun",pwd="sinisterkid"}
 wifi.sta.connect()

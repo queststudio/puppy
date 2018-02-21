@@ -1,33 +1,25 @@
-i2c = require("i2c")
-local id = 0
-local scl = 2
-local sda = 1
-local speed = i2c.SLOW
-
+local i2cAdapter = require("i2c-adapter")
+local bus = require("bus")
+local identity = require("identity")
+local reporter = require("reporter")
+    
 print("Starting I2C... ")
+local reporterId = identity.get()
+local scl = 2 
+local sda = 1
+local range, isThere, read = i2cAdapter.start(scl, sda)
+local reportAll = reporter.reportAll
 
-i2c.setup(id, sda, scl, speed)
 
-function isThere(address, length)
-    i2c.start(id)
-    local isThere = i2c.address(id, address, i2c.RECEIVER)
-    i2c.read(id, length)
-    i2c.stop(id)
-    return isThere
-end
-
-function read(address, length)
-    i2c.start(id)
-    i2c.address(id, address, i2c.RECEIVER)
-    local message = i2c.read(id, length)
-    i2c.stop(id)
-    return message
+function isThereStub(address)
+    if address < 15 then
+        return true
+    else
+        return false
+    end
 end
 
 tmr.alarm(1, 1000, 1, function()
-    for i=0,127 do
-        local isPresent = isThere(i, 1)
-        local state = read(i, 1)
-        print(i .. ': ' .. tostring(isPresent) .. ' - ' .. string.byte(state))
-    end
+    local devices = bus.getDevices(range, isThereStub, read)
+    reportAll(reporterId, devices)
 end)
