@@ -3,7 +3,7 @@
 SCL - D1 (pin 5)  
 SDA - D2 (pin 4)
 
-### To find out the port
+### To find out the port (Windows)
 
 ```bash
 mode
