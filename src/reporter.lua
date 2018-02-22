@@ -4,18 +4,15 @@ function length(t)
   return count
 end
 
-function report(reporterId, address, state)
-    print('[' .. reporterId..'] ' .. address .. ': ' .. string.byte(state))
-end
-
-function reportAll(reporterId, devices)
-    print('Found devices: ' .. length(devices))
-    for address, state in pairs(devices) do
-        report(reporterId, address, state)
+function start(reporterId)
+    return function (devices)
+        print('Found devices: ' .. length(devices))
+        for address, state in pairs(devices) do
+            print('[' .. reporterId..'] ' .. address .. ': ' .. state)
+        end
     end
 end
 
 return {
-    report = report,
-    reportAll = reportAll
+    start = start
 }
