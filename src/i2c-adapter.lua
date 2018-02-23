@@ -11,7 +11,8 @@ end
 function _read(i2c, id, address, length)
     i2c.start(id)
     i2c.address(id, address, i2c.RECEIVER)
-    local message = i2c.read(id, length)
+    local receivedByte = i2c.read(id, length)
+    local message = string.byte(receivedByte)
     i2c.stop(id)
     return message
 end
